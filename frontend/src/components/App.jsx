@@ -24,10 +24,10 @@ const AuthProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
-  const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut }), [loggedIn]);
+  // const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut }), [loggedIn]);
 
   return (
-    <AuthContext.Provider value={memoizedValue}>
+    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
       {children}
     </AuthContext.Provider>
   );

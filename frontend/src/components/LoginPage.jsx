@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
@@ -9,6 +8,17 @@ import {
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import avatarImagePath from '../assets/avatar.jpeg';
 import useAuth from '../hooks';
+
+const logInSchema = yup.object({
+  username: yup.string()
+    .min(6, 'От 6 до 20 символов')
+    .max(20, 'От 6 до 20 символов')
+    .required('Обязательное поле'),
+  password: yup.string()
+    .min(6, 'От 6 до 20 символов')
+    .max(20, 'От 6 до 20 символов')
+    .required('Обязательное поле'),
+});
 
 const LoginPage = () => {
   const auth = useAuth();
@@ -22,19 +32,11 @@ const LoginPage = () => {
       username: '',
       password: '',
     },
-    validationSchema: yup.object().shape({
-      username: yup.string()
-        .min(6, 'От 6 до 20 символов')
-        .max(20, 'От 6 до 20 символов')
-        .required('Обязательное поле'),
-      password: yup.string()
-        .min(6, 'От 6 до 20 символов')
-        .max(20, 'От 6 до 20 символов')
-        .required('Обязательное поле'),
-    }),
-    onSubmit: async (values) => {
-      setAuthFailed(false);
-      formik.setSubmitting(false);
+    validationSchema: logInSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      // setAuthFailed(false);
+      // formik.setSubmitting(false);
     },
   });
 
@@ -50,7 +52,10 @@ const LoginPage = () => {
             <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
               <img src={avatarImagePath} alt="LogIn page" className="roundedCircle" />
             </div>
-            <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
+            <Form
+              className="col-12 col-md-6 mt-3 mt-mb-0"
+              onSubmit={formik.handleSubmit}
+            >
               <h1 className="text-center mb-4">Войти</h1>
               <fieldset disabled={formik.isSubmitting}>
                 <Form.Group className="mb-3 form-floating" controlId="username">
@@ -65,6 +70,9 @@ const LoginPage = () => {
                     required
                     ref={input}
                   />
+                  {formik.touched.username && formik.errors.username
+                    ? (<div>{formik.errors.username}</div>)
+                    : null}
                   <Form.Label>Ваш ник</Form.Label>
                 </Form.Group>
 
@@ -80,6 +88,9 @@ const LoginPage = () => {
                     required
                     ref={input}
                   />
+                  {formik.touched.password && formik.errors.password
+                    ? (<div>{formik.errors.password}</div>)
+                    : null}
                   <Form.Label>Пароль</Form.Label>
                 </Form.Group>
 

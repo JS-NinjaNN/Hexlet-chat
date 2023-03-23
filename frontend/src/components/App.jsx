@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, {
+  useMemo, useState, useCallback, useEffect,
+} from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,7 +9,7 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import { Navbar, Container } from 'react-bootstrap';
+import { Navbar, Container, Button } from 'react-bootstrap';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -24,10 +26,10 @@ const AuthProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
-  // const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut }), [loggedIn]);
+  const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut }), [loggedIn]);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={memoizedValue}>
       {children}
     </AuthContext.Provider>
   );
@@ -42,6 +44,16 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
+const AuthButton = () => {
+  const auth = useAuth();
+
+  return (
+    auth.loggedIn
+      ? <Button onClick={auth.logOut}>Выйти</Button>
+      : null
+  );
+};
+
 const App = () => (
   <AuthProvider>
     <Router>
@@ -49,22 +61,21 @@ const App = () => (
         <Navbar bg="white" expand="lg" className="shadow-sm">
           <Container>
             <Navbar.Brand as={Link} to="/">Hexlet Chat</Navbar.Brand>
+            <AuthButton />
           </Container>
         </Navbar>
-        <div className="container-fluid h-100">
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <PrivateRoute>
-                  <ChatPage />
-                </PrivateRoute>
-              )}
-            />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <ChatPage />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </div>
     </Router>
   </AuthProvider>

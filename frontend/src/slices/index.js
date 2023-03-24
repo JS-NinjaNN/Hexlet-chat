@@ -13,6 +13,6 @@ export {
 };
 
 export default combineReducers({
-  channels: channelsSlice,
-  messages: messagesSlice,
+  channelsInfo: channelsSlice,
+  messagesInfo: messagesSlice,
 });

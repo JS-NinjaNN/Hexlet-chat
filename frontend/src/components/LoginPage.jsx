@@ -6,8 +6,8 @@ import {
   Button, Form, Col, Card, Row,
 } from 'react-bootstrap';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import avatarImagePath from '../assets/avatar.jpeg';
-import useAuth from '../hooks';
+import avatarImagePath from '../assets/avatar.jpg';
+import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
 const logInSchema = yup.object({
@@ -42,8 +42,8 @@ const LoginPage = () => {
 
       try {
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
+        localStorage.setItem('userId', JSON.stringify({ ...res.data, username: values.username }));
+        auth.logIn({ username: values.username });
         const { from } = location.state || { from: { pathname: '/' } };
         navigate(from);
       } catch (err) {

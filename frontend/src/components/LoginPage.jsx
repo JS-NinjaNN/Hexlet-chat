@@ -5,23 +5,15 @@ import * as yup from 'yup';
 import {
   Button, Form, Col, Card, Row,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import avatarImagePath from '../assets/avatar.jpg';
+
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
-const logInSchema = yup.object().shape({
-  username: yup
-    .string()
-    .trim()
-    .required('Обязательное поле'),
-  password: yup
-    .string()
-    .trim()
-    .required('Обязательное поле'),
-});
-
 const LoginPage = () => {
+  const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
@@ -29,6 +21,17 @@ const LoginPage = () => {
   useEffect(() => {
     input.current.focus();
   }, []);
+
+  const logInSchema = yup.object().shape({
+    username: yup
+      .string()
+      .trim()
+      .required(t('required')),
+    password: yup
+      .string()
+      .trim()
+      .required(t('required')),
+  });
 
   const formik = useFormik({
     initialValues: {

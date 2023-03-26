@@ -6,6 +6,7 @@ const ruLocales = {
     loginPage: {
       required: 'Обязательное поле',
     },
+    required: 'Обязательное поле',
   },
 };
 

@@ -54,10 +54,10 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const Init = async () => {
+const Init = () => {
   const i18n = i18next.createInstance();
 
-  await i18n
+  i18n
     .use(initReactI18next)
     .init({
       resources,

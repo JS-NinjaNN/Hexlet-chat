@@ -18,6 +18,10 @@ const messagesSlice = createSlice({
     builder
       .addCase(channelsActions.fetchData.fulfilled, (state, { payload }) => {
         state.messages = payload.messages;
+      })
+      .addCase(channelsActions.deleteChannel, (state, { payload }) => {
+        state.messages = state.messages
+          .filter((message) => message.channelId !== payload.id);
       });
   },
 });

@@ -113,17 +113,27 @@ const App = () => {
     });
   }, [dispatch, socket]);
 
-  const removeChannel = useCallback((id) => {
-    socket.emit('removeChannel', { id }, (response) => {
+  const removeChannel = useCallback((id, cb) => {
+    socket.emit('removeChannel', id, (response) => {
       const { status } = response;
       if (status === 'ok') {
-        dispatch(removeChannel({ id }));
+        dispatch(deleteChannel(id));
+        cb();
       }
       return status;
     });
   }, [dispatch, socket]);
 
-  const renameChannel = useCallback(({ name, id }) => socket.emit('renameChannel', { name, id }), [socket]);
+  const renameChannel = useCallback(({ id, name }, cb) => {
+    socket.emit('renameChannel', { id, name }, (response) => {
+      const { status } = response;
+      if (status === 'ok') {
+        dispatch(channelRename({ id, name }));
+        cb();
+      }
+      return status;
+    });
+  }, [dispatch, socket]);
 
   const socketApi = useMemo(
     () => ({

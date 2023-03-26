@@ -39,6 +39,7 @@ const MessagesForm = ({ activeChannel }) => {
       } catch (error) {
         console.error(error.message);
       }
+      input.current.focus();
     },
     validateOnChange: messageFormSchema,
   });

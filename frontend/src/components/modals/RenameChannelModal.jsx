@@ -39,7 +39,6 @@ const RenameChannelModal = ({ onHide, modalInfo }) => {
     },
     validationSchema: channelsValidationSchema(channelsNames),
     onSubmit: async (values) => {
-      leoProfanity.loadDictionary('ru');
       const cleanedName = leoProfanity.clean(values.name);
       try {
         await socketApi.renameChannel({ name: cleanedName, id: currentChannel.id }, onHide);

@@ -31,18 +31,6 @@ const Channels = () => {
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const hideModal = () => setModalInfo({ type: null, channel: null });
 
-  // const openAddChannelModal = () => {
-  //   dispatch(openModal({ type: 'adding' }));
-  // };
-
-  // const openRemoveChannelModal = (id) => {
-  //   dispatch(openModal({ type: 'removeChannel', id }));
-  // };
-
-  // const openRenameChannelModal = (id) => {
-  //   dispatch(openModal({ type: 'renameChannel', id }));
-  // };
-
   return (
     <>
       <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">

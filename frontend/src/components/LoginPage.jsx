@@ -14,14 +14,10 @@ const logInSchema = yup.object().shape({
   username: yup
     .string()
     .trim()
-    .min(5, 'От 5 до 20 символов')
-    .max(20, 'От 5 до 20 символов')
     .required('Обязательное поле'),
   password: yup
     .string()
     .trim()
-    .min(5, 'От 5 до 20 символов')
-    .max(20, 'От 5 до 20 символов')
     .required('Обязательное поле'),
 });
 

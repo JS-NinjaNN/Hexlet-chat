@@ -37,7 +37,6 @@ const AddChannelModal = ({ onHide }) => {
     },
     validationSchema: channelsValidationSchema(channelsNames),
     onSubmit: async (values) => {
-      leoProfanity.loadDictionary('ru');
       const cleanedName = leoProfanity.clean(values.name);
       try {
         await socketApi.newChannel(cleanedName, onHide);

@@ -1,12 +1,13 @@
-// import i18next from 'i18next';
-// import { I18nextProvider, initReactI18next } from 'react-i18next';
 import React, { useMemo, useState, useCallback } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { configureStore } from '@reduxjs/toolkit';
+import i18next from 'i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 
 import App from './components/App.jsx';
-// import resources from './locales/index.js';
+import resources from './locales/index.js';
 import reducer, { actions } from './slices/index.js';
 import { SocketContext, AuthContext } from './contexts/index.jsx';
 
@@ -53,15 +54,19 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const Init = () => {
-  // const i18n = i18next.createInstance();
+const Init = async () => {
+  const i18n = i18next.createInstance();
 
-  // await i18n
-  //   .use(initReactI18next)
-  //   .init({
-  //     resources,
-  //     fallbackLng: 'ru',
-  //   });
+  await i18n
+    .use(initReactI18next)
+    .init({
+      resources,
+      fallbackLng: 'ru',
+    });
+
+  const ruDict = leoProfanity.getDictionary('ru');
+  const enDict = leoProfanity.getDictionary('en');
+  leoProfanity.add(ruDict, enDict);
 
   const socket = io();
   const dispatch = useDispatch();
@@ -127,15 +132,13 @@ const Init = () => {
   );
 
   return (
-    <>
-      {/* <I18nextProvider i18n={i18n}> */}
+    <I18nextProvider i18n={i18n}>
       <SocketContext.Provider value={socketApi}>
         <AuthProvider>
           <App />
         </AuthProvider>
       </SocketContext.Provider>
-      {/* </I18nextProvider> */}
-    </>
+    </I18nextProvider>
   );
 };
 

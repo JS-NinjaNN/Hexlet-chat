@@ -25,7 +25,6 @@ const MessagesForm = ({ activeChannel }) => {
       body: '',
     },
     onSubmit: async (values) => {
-      leoProfanity.loadDictionary('ru');
       const cleanedMessage = leoProfanity.clean(values.body);
       const message = {
         text: cleanedMessage,

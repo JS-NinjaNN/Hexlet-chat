@@ -5,17 +5,21 @@ import * as yup from 'yup';
 import {
   Button, Form, Col, Card, Row,
 } from 'react-bootstrap';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import avatarImagePath from '../assets/avatar.jpg';
 import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
-const logInSchema = yup.object({
-  username: yup.string()
+const logInSchema = yup.object().shape({
+  username: yup
+    .string()
+    .trim()
     .min(5, 'От 5 до 20 символов')
     .max(20, 'От 5 до 20 символов')
     .required('Обязательное поле'),
-  password: yup.string()
+  password: yup
+    .string()
+    .trim()
     .min(5, 'От 5 до 20 символов')
     .max(20, 'От 5 до 20 символов')
     .required('Обязательное поле'),
@@ -24,7 +28,6 @@ const logInSchema = yup.object({
 const LoginPage = () => {
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
   const input = useRef(null);
   useEffect(() => {
@@ -42,10 +45,9 @@ const LoginPage = () => {
 
       try {
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify({ ...res.data, username: values.username }));
+        localStorage.setItem('userId', JSON.stringify({ ...res.data }));
         auth.logIn({ username: values.username });
-        const { from } = location.state || { from: { pathname: '/' } };
-        navigate(from);
+        navigate(routes.chatPagePath());
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -65,7 +67,7 @@ const LoginPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="p-5 row">
               <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                <img src={avatarImagePath} alt="LogIn page" className="roundedCircle" />
+                <img src={avatarImagePath} alt="LogIn page" className="rounded-circle" />
               </div>
               <Form
                 className="col-12 col-md-6 mt-3 mt-mb-0"
@@ -82,12 +84,10 @@ const LoginPage = () => {
                       placeholder="username"
                       autoComplete="username"
                       isInvalid={authFailed}
+                      isValid={formik.touched.password && !formik.errors.username}
                       required
                       ref={input}
                     />
-                    {formik.touched.username && formik.errors.username
-                      ? (<div>{formik.errors.username}</div>)
-                      : null}
                     <Form.Label>Ваш ник</Form.Label>
                   </Form.Group>
 
@@ -100,12 +100,9 @@ const LoginPage = () => {
                       placeholder="password"
                       autoComplete="current-password"
                       isInvalid={authFailed}
+                      isValid={formik.touched.password && !formik.errors.password}
                       required
-                      ref={input}
                     />
-                    {formik.touched.password && formik.errors.password
-                      ? (<div>{formik.errors.password}</div>)
-                      : null}
                     <Form.Label>Пароль</Form.Label>
                     <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
                   </Form.Group>
@@ -117,7 +114,7 @@ const LoginPage = () => {
               <div className="text-center">
                 <span>Нет аккаунта?</span>
                 {' '}
-                <NavLink to="/login">Регистрация</NavLink>
+                <NavLink to={routes.signupPagePath()}>Регистрация</NavLink>
               </div>
             </Card.Footer>
           </Card>

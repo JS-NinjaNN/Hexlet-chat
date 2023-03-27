@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import leoProfanity from 'leo-profanity';
+import { useTranslation } from 'react-i18next';
 import {
   Modal, Form, Button, FormControl,
 } from 'react-bootstrap';
@@ -9,18 +10,18 @@ import { useSelector } from 'react-redux';
 
 import { useSocketApi } from '../../hooks/index.jsx';
 
-const channelsValidationSchema = (channelsNames) => yup.object().shape({
+const channelsValidationSchema = (channelsNames, translate) => yup.object().shape({
   name: yup
     .string()
     .trim()
-    .required('required')
-    .min(3, 'min')
-    .max(20, 'max')
-    .notOneOf(channelsNames, 'duplicate'),
-  // тут в аргументы i18n нужно
+    .required(translate('required'))
+    .min(3, translate('nameLength'))
+    .max(20, translate('nameLength'))
+    .notOneOf(channelsNames, translate('modals.duplicate')),
 });
 
 const AddChannelModal = ({ onHide }) => {
+  const { t } = useTranslation();
   const channels = useSelector((s) => s.channelsInfo.channels);
   const channelsNames = channels.map((channel) => channel.name);
   const socketApi = useSocketApi();
@@ -35,7 +36,7 @@ const AddChannelModal = ({ onHide }) => {
     initialValues: {
       name: '',
     },
-    validationSchema: channelsValidationSchema(channelsNames),
+    validationSchema: channelsValidationSchema(channelsNames, t),
     onSubmit: async (values) => {
       const cleanedName = leoProfanity.clean(values.name);
       try {
@@ -50,7 +51,7 @@ const AddChannelModal = ({ onHide }) => {
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -65,7 +66,7 @@ const AddChannelModal = ({ onHide }) => {
               value={formik.values.name}
               isInvalid={!!formik.errors.name}
             />
-            <Form.Label htmlFor="name" visuallyHidden>Имя канала</Form.Label>
+            <Form.Label htmlFor="name" visuallyHidden>{t('modals.channelName')}</Form.Label>
             <FormControl.Feedback type="invalid">
               {formik.errors.name}
             </FormControl.Feedback>
@@ -75,7 +76,7 @@ const AddChannelModal = ({ onHide }) => {
                 type="button"
                 onClick={onHide}
               >
-                Отменить
+                {t('modals.cancelButton')}
               </Button>
               <Button
                 variant="primary"
@@ -83,7 +84,7 @@ const AddChannelModal = ({ onHide }) => {
                 onClick={formik.handleSubmit}
                 disabled={formik.errors.name}
               >
-                Отправить
+                {t('modals.addButton')}
               </Button>
             </Modal.Footer>
           </Form.Group>

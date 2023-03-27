@@ -22,15 +22,20 @@ const LoginPage = () => {
     input.current.focus();
   }, []);
 
+  const changeHandler = (e) => {
+    e.preventDefault();
+    setAuthFailed(false);
+  };
+
   const logInSchema = yup.object().shape({
     username: yup
       .string()
       .trim()
-      .required(t('required')),
+      .required(),
     password: yup
       .string()
       .trim()
-      .required(t('required')),
+      .required(),
   });
 
   const formik = useFormik({
@@ -72,48 +77,58 @@ const LoginPage = () => {
                 className="col-12 col-md-6 mt-3 mt-mb-0"
                 onSubmit={formik.handleSubmit}
               >
-                <h1 className="text-center mb-4">Войти</h1>
+                <h1 className="text-center mb-4">{t('enter')}</h1>
                 <fieldset disabled={formik.isSubmitting}>
                   <Form.Group className="mb-3 form-floating" controlId="username">
                     <Form.Control
                       type="text"
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        changeHandler(e);
+                        formik.handleChange(e);
+                      }}
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
-                      placeholder="username"
+                      placeholder={t('username')}
                       autoComplete="username"
-                      isInvalid={authFailed}
-                      isValid={formik.touched.password && !formik.errors.username}
                       required
                       ref={input}
                     />
-                    <Form.Label>Ваш ник</Form.Label>
+                    <Form.Label>{t('username')}</Form.Label>
                   </Form.Group>
 
                   <Form.Group className="mb-4 form-floating" controlId="password">
                     <Form.Control
                       type="password"
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        changeHandler(e);
+                        formik.handleChange(e);
+                      }}
                       value={formik.values.password}
                       onBlur={formik.handleBlur}
-                      placeholder="password"
+                      placeholder={t('password')}
                       autoComplete="current-password"
                       isInvalid={authFailed}
-                      isValid={formik.touched.password && !formik.errors.password}
                       required
                     />
-                    <Form.Label>Пароль</Form.Label>
-                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
+                    <Form.Label>{t('password')}</Form.Label>
+                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip>{t('invalidData')}</Form.Control.Feedback>
                   </Form.Group>
-                  <Button type="submit" variant="outline-primary" className="w-100 mb-3">Войти</Button>
+                  <Button
+                    type="submit"
+                    variant="outline-primary"
+                    className="w-100 mb-3"
+                    disabled={formik.errors.username || formik.errors.password}
+                  >
+                    {t('enter')}
+                  </Button>
                 </fieldset>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?</span>
+                <span>{t('noAccount')}</span>
                 {' '}
-                <NavLink to={routes.signupPagePath()}>Регистрация</NavLink>
+                <NavLink to={routes.signupPagePath()}>{t('signUp')}</NavLink>
               </div>
             </Card.Footer>
           </Card>

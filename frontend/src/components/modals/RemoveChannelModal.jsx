@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { useSocketApi } from '../../hooks/index.jsx';
 import { actions } from '../../slices/index.js';
 
 const RemoveChannelModal = ({ onHide, modalInfo }) => {
+  const { t } = useTranslation();
   const { id } = modalInfo.channel;
   const socketApi = useSocketApi();
   const dispatch = useDispatch();
@@ -26,10 +28,10 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.removeChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Вы уверены?</p>
+        <p className="lead">{t('modals.submitRemove')}</p>
         <div className="d-flex justify-content-end">
           <Button
             variant="secondary"
@@ -37,14 +39,14 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
             onClick={onHide}
             className="me-2"
           >
-            Отменить
+            {t('modals.cancelButton')}
           </Button>
           <Button
             variant="danger"
             type="button"
             onClick={() => handleSubmit()}
           >
-            Удалить
+            {t('modals.removeButton')}
           </Button>
         </div>
       </Modal.Body>

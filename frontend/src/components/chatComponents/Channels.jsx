@@ -4,6 +4,7 @@ import { BsPlusSquare } from 'react-icons/bs';
 import {
   Nav, Button, Dropdown, ButtonGroup,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../slices/index.js';
 import getModal from '../modals/index.js';
@@ -18,6 +19,7 @@ const renderModal = ({ modalInfo, hideModal }) => {
 };
 
 const Channels = () => {
+  const { t } = useTranslation();
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
 
   const { channels, currentChannelId } = useSelector((s) => s.channelsInfo);
@@ -35,11 +37,11 @@ const Channels = () => {
     <>
       <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
         <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-          <b>Каналы</b>
-          <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={() => showModal('adding')}>
+          <b>{t('channels')}</b>
+          <Button type="button" className="p-0 text-primary" variant="group-vertical" onClick={() => showModal('adding')}>
             <BsPlusSquare size="20" />
             <span className="visually-hidden">+</span>
-          </button>
+          </Button>
         </div>
         <Nav
           as="ul"
@@ -63,14 +65,14 @@ const Channels = () => {
                         {name}
                       </Button>
                       <Dropdown.Toggle variant={id === currentChannelId ? 'secondary' : 'light'}>
-                        <span className="visually-hidden">Управление каналом</span>
+                        <span className="visually-hidden">{t('channelControl')}</span>
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item onClick={() => showModal('removing', channel)}>
-                          Удалить
+                          {t('remove')}
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => showModal('renaming', channel)}>
-                          Переименовать
+                          {t('rename')}
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

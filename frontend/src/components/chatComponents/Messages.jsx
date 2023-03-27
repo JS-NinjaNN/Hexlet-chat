@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
 
@@ -16,6 +16,12 @@ const Messages = () => {
   const activeChannelMessages = messages
     .filter((message) => message.channelId === currentChannelId);
 
+  const messagesView = useRef(null);
+
+  useEffect(() => {
+    messagesView.current.scrollIntoView({ behavior: 'smooth' });
+  }, [activeChannelMessages]);
+
   return (
     <Col className="p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -27,6 +33,7 @@ const Messages = () => {
           {activeChannelMessages.map((message) => (
             <Message message={message} key={message.id} />
           ))}
+          <div ref={messagesView} />
         </div>
         <MessagesForm activeChannel={activeChannel} />
       </div>

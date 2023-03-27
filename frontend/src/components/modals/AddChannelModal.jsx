@@ -6,8 +6,8 @@ import {
   Modal, Form, Button, FormControl,
 } from 'react-bootstrap';
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-
 import { useSocketApi } from '../../hooks/index.jsx';
 
 const channelsValidationSchema = (channelsNames, translate) => yup.object().shape({
@@ -32,6 +32,13 @@ const AddChannelModal = ({ onHide }) => {
     input.current.focus();
   }, []);
 
+  const notify = () => toast.success(t('toasts.createChannel'));
+
+  const handleClose = () => {
+    onHide();
+    notify();
+  };
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -40,7 +47,7 @@ const AddChannelModal = ({ onHide }) => {
     onSubmit: async (values) => {
       const cleanedName = leoProfanity.clean(values.name);
       try {
-        await socketApi.newChannel(cleanedName, onHide);
+        await socketApi.newChannel(cleanedName, handleClose);
         formik.values.name = '';
       } catch (error) {
         console.error(error.message);

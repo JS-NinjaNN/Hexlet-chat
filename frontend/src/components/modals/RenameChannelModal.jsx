@@ -6,6 +6,7 @@ import {
   Modal, Form, Button, FormControl,
 } from 'react-bootstrap';
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
 
 import { useSelector } from 'react-redux';
 import { useSocketApi } from '../../hooks/index.jsx';
@@ -34,6 +35,13 @@ const RenameChannelModal = ({ onHide, modalInfo }) => {
     input.current.select();
   }, []);
 
+  const notify = () => toast.success(t('toasts.renameChannel'));
+
+  const handleClose = () => {
+    onHide();
+    notify();
+  };
+
   const formik = useFormik({
     initialValues: {
       name: currentChannel.name,
@@ -42,7 +50,7 @@ const RenameChannelModal = ({ onHide, modalInfo }) => {
     onSubmit: async (values) => {
       const cleanedName = leoProfanity.clean(values.name);
       try {
-        await socketApi.renameChannel({ name: cleanedName, id: currentChannel.id }, onHide);
+        await socketApi.renameChannel({ name: cleanedName, id: currentChannel.id }, handleClose);
         formik.values.name = '';
       } catch (error) {
         console.error(error.message);

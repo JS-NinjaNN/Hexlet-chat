@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import Channels from './chatComponents/Channels.jsx';
 import Messages from './chatComponents/Messages.jsx';
@@ -15,17 +16,19 @@ const ChatPage = () => {
   const channelsInfo = useSelector((s) => s);
 
   useEffect(() => {
+    const notify = () => toast.error(t('toasts.fetchDataError'));
     const fetchData = async () => {
       const authHeader = await getAuthHeader();
       dispatch(actions.fetchData(authHeader))
         .unwrap()
-        .catch((e) => {
-          console.log(e);
+        .catch(({ status }) => {
+          notify();
+          console.error(status);
         });
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, t]);
 
   if (channelsInfo.loading) {
     return (

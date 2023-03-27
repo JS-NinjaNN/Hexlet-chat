@@ -1,5 +1,12 @@
 const enLocales = {
   translation: {
+    toasts: {
+      createChannel: 'Channel successfully created',
+      removeChannel: 'Channel successfully deleted',
+      renameChannel: 'Channel successfully renamed',
+      fetchDataError: 'An error occurred while loading data',
+      changeLang: 'Language successfully changed to',
+    },
     modals: {
       duplicate: 'A channel with this name already exists',
       channelName: 'Channel name',

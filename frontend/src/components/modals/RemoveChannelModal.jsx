@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { useSocketApi } from '../../hooks/index.jsx';
 import { actions } from '../../slices/index.js';
@@ -14,9 +15,16 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
 
   const { currentChannelId } = useSelector((state) => state.channelsInfo);
 
+  const notify = () => toast.success(t('toasts.removeChannel'));
+
+  const handleClose = () => {
+    onHide();
+    notify();
+  };
+
   const handleSubmit = async () => {
     try {
-      await socketApi.removeChannel({ id }, onHide);
+      await socketApi.removeChannel({ id }, handleClose);
       if (currentChannelId === id) {
         dispatch(actions.setCurrentChannel({ id: 1 }));
       }

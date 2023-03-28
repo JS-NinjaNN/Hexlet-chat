@@ -24,7 +24,7 @@ import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
 const rollbarConfig = {
-  accessToken: '17c6ca274ffe4be588c5d29d36c4749f',
+  accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
   payload: {
     environment: 'production',
   },

@@ -9,10 +9,12 @@ import Messages from './chatComponents/Messages.jsx';
 
 import { actions } from '../slices/index.js';
 import getAuthHeader from '../getAuthHeader.js';
+import { useAuth } from '../hooks/index.jsx';
 
 const ChatPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const auth = useAuth();
   const channelsInfo = useSelector((s) => s);
 
   useEffect(() => {
@@ -21,14 +23,15 @@ const ChatPage = () => {
       const authHeader = await getAuthHeader();
       dispatch(actions.fetchData(authHeader))
         .unwrap()
-        .catch(({ status }) => {
+        .catch((error) => {
           notify();
-          console.error(status);
+          auth.logOut();
+          console.error(error);
         });
     };
 
     fetchData();
-  }, [dispatch, t]);
+  }, [dispatch, t, auth]);
 
   if (channelsInfo.loading) {
     return (

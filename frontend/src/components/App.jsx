@@ -32,6 +32,11 @@ const rollbarConfig = {
   captureUnhandledRejections: true,
 };
 
+const TestError = () => {
+  const a = null;
+  return a.hello();
+};
+
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
   const location = useLocation();
@@ -70,6 +75,7 @@ const App = () => {
           <Router>
             <Navbar bg="white" expand="lg" className="shadow-sm">
               <Container>
+                <TestError />
                 <Navbar.Brand as={Link} to={routes.chatPagePath()}>{t('chatLogo')}</Navbar.Brand>
                 <Button onClick={() => handleLangChange(i18n)} variant="group-vertical">
                   <BsGlobe size="35" />

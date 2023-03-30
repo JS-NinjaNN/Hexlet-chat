@@ -28,19 +28,20 @@ const SignUpPage = () => {
       .trim()
       .min(3, t('nameLength'))
       .max(20, t('nameLength'))
+      .typeError(t('required'))
       .required(t('required')),
     password: yup
       .string()
       .trim()
       .min(6, t('signUpPage.minPasswordLength'))
+      .typeError(t('required'))
       .required(t('required')),
     passwordConfirmation: yup
       .string()
-      .trim()
-      .required(t('required'))
-      .oneOf(
-        [yup.ref('password'), null],
+      .test(
+        'passwordConfirmation',
         t('signUpPage.invalidPasswordConfirmation'),
+        (password, context) => password === context.parent.password,
       ),
   });
 

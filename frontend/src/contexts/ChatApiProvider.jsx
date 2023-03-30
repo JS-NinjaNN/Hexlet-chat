@@ -32,7 +32,9 @@ const ChatApiProvider = ({ children }) => {
       if (cb) {
         cb();
       }
-      return response.status;
+      if (response.status !== 'ok') {
+        throw new Error('chatApiError');
+      }
     });
   }, [socket]);
 

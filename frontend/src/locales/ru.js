@@ -6,6 +6,7 @@ const ruLocales = {
       renameChannel: 'Канал переименован',
       fetchDataError: 'Произошла ошибка в загрузке данных',
       changeLang: 'Язык успешно изменен на',
+      chatApiError: 'Произошла непредвиденная ошибка',
     },
     modals: {
       duplicate: 'Канал с таким именем уже существует',

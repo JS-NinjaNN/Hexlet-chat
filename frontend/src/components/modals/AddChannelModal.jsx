@@ -33,6 +33,7 @@ const AddChannelModal = ({ onHide }) => {
   }, []);
 
   const notify = () => toast.success(t('toasts.createChannel'));
+  const notifyError = (text) => toast.error(t(`toasts.${text}`));
 
   const handleClose = () => {
     onHide();
@@ -44,14 +45,13 @@ const AddChannelModal = ({ onHide }) => {
       name: '',
     },
     validationSchema: channelsValidationSchema(channelsNames, t),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const cleanedName = leoProfanity.clean(values.name);
       try {
-        chatApi('newChannel', { name: cleanedName }, handleClose);
-        // await chatApi.newChannel(cleanedName, handleClose);
+        await chatApi('newChannel', { name: cleanedName }, handleClose);
         formik.values.name = '';
       } catch (error) {
-        console.error(error.message);
+        notifyError(error.message);
       }
     },
   });

@@ -5,6 +5,7 @@ import leoProfanity from 'leo-profanity';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { BsArrowRightSquare } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { useAuth, useChatApi } from '../../hooks/index.jsx';
 
@@ -18,6 +19,8 @@ const MessagesForm = ({ activeChannel }) => {
   const chatApi = useChatApi();
   const input = useRef(null);
 
+  const notifyError = (text) => toast.error(t(`toasts.${text}`));
+
   useEffect(() => {
     input.current.focus();
   }, []);
@@ -27,7 +30,7 @@ const MessagesForm = ({ activeChannel }) => {
       body: '',
     },
     validationSchema: messageFormSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const cleanedMessage = leoProfanity.clean(values.body);
       const message = {
         text: cleanedMessage,
@@ -36,12 +39,13 @@ const MessagesForm = ({ activeChannel }) => {
       };
 
       try {
-        chatApi('newMessage', message);
+        await chatApi('newMessage', message);
         formik.values.body = '';
       } catch (error) {
-        console.error(error.message);
+        notifyError(error.message);
+      } finally {
+        input.current.focus();
       }
-      input.current.focus();
     },
   });
 

@@ -36,6 +36,7 @@ const RenameChannelModal = ({ onHide, modalInfo }) => {
   }, []);
 
   const notify = () => toast.success(t('toasts.renameChannel'));
+  const notifyError = (text) => toast.error(t(`toasts.${text}`));
 
   const handleClose = () => {
     onHide();
@@ -53,7 +54,7 @@ const RenameChannelModal = ({ onHide, modalInfo }) => {
         chatApi('renameChannel', { name: cleanedName, id: targetChannel.id }, handleClose);
         formik.values.name = '';
       } catch (error) {
-        console.error(error.message);
+        notifyError(error.message);
       }
     },
   });

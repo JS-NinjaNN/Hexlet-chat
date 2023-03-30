@@ -11,6 +11,7 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
   const chatApi = useChatApi();
 
   const notify = () => toast.success(t('toasts.removeChannel'));
+  const notifyError = (text) => toast.error(t(`toasts.${text}`));
 
   const handleClose = () => {
     onHide();
@@ -21,7 +22,7 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
     try {
       chatApi('removeChannel', { id }, handleClose);
     } catch (error) {
-      console.error(error);
+      notifyError(error.message);
     }
   };
 

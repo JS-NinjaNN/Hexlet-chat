@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/JS-NinjaNN/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/JS-NinjaNN/frontend-project-12/actions)
+[![Сhat-check](https://github.com/JS-NinjaNN/frontend-project-12/actions/workflows/chat-check.yml/badge.svg)](https://github.com/JS-NinjaNN/frontend-project-12/actions/workflows/chat-check.yml)
 
 # Hexlet Chat
 
@@ -30,7 +31,7 @@ make install
 make start
 ```
 
-### Поддержка браузеров:
+### Supports the following browsers:
 
 ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/main/src/firefox/firefox_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/main/src/safari/safari_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/main/src/opera/opera_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/main/src/edge/edge_48x48.png) | ![IE](https://raw.githubusercontent.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) |
 --- | --- | --- | --- | --- | --- |

@@ -147,11 +147,6 @@ const SignUpPage = () => {
                     type="submit"
                     variant="outline-primary"
                     className="w-100 mb-3"
-                    disabled={
-                      formik.errors.username
-                      || formik.errors.password
-                      || formik.errors.passwordConfirmation
-                    }
                   >
                     {t('signUpPage.signUp')}
                   </Button>

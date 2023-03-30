@@ -27,7 +27,7 @@ const MessagesForm = ({ activeChannel }) => {
       body: '',
     },
     validationSchema: messageFormSchema,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const cleanedMessage = leoProfanity.clean(values.body);
       const message = {
         text: cleanedMessage,
@@ -36,7 +36,6 @@ const MessagesForm = ({ activeChannel }) => {
       };
 
       try {
-        // await chatApi.sendMessage(message);
         chatApi('newMessage', message);
         formik.values.body = '';
       } catch (error) {

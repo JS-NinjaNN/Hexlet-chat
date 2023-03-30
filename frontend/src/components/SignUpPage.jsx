@@ -6,16 +6,16 @@ import { useTranslation } from 'react-i18next';
 import {
   Button, Form, Col, Card, Row,
 } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
-import avatarImagePath from '../assets/avatar_1.jpg';
+import { NavLink } from 'react-router-dom';
+
 import { useAuth } from '../hooks/index.jsx';
-import routes from '../routes.js';
+import routes from '../routes/routes.js';
+import avatarImagePath from '../assets/avatar_1.jpg';
 
 const SignUpPage = () => {
   const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
-  const navigate = useNavigate();
   const input = useRef(null);
   useEffect(() => {
     input.current.focus();
@@ -60,7 +60,6 @@ const SignUpPage = () => {
         });
         localStorage.setItem('userId', JSON.stringify({ ...res.data }));
         auth.logIn({ username: values.username });
-        navigate(routes.chatPagePath());
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 409) {

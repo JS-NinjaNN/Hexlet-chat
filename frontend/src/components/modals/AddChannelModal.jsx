@@ -8,7 +8,7 @@ import {
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { useSocketApi } from '../../hooks/index.jsx';
+import { useChatApi } from '../../hooks/index.jsx';
 
 const channelsValidationSchema = (channelsNames, translate) => yup.object().shape({
   name: yup
@@ -24,7 +24,7 @@ const AddChannelModal = ({ onHide }) => {
   const { t } = useTranslation();
   const channels = useSelector((s) => s.channelsInfo.channels);
   const channelsNames = channels.map((channel) => channel.name);
-  const socketApi = useSocketApi();
+  const chatApi = useChatApi();
 
   const input = useRef(null);
 
@@ -44,10 +44,11 @@ const AddChannelModal = ({ onHide }) => {
       name: '',
     },
     validationSchema: channelsValidationSchema(channelsNames, t),
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const cleanedName = leoProfanity.clean(values.name);
       try {
-        await socketApi.newChannel(cleanedName, handleClose);
+        chatApi('newChannel', { name: cleanedName }, handleClose);
+        // await chatApi.newChannel(cleanedName, handleClose);
         formik.values.name = '';
       } catch (error) {
         console.error(error.message);

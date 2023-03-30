@@ -6,7 +6,7 @@ import { Form, Button, InputGroup } from 'react-bootstrap';
 import { BsArrowRightSquare } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
 
-import { useAuth, useSocketApi } from '../../hooks/index.jsx';
+import { useAuth, useChatApi } from '../../hooks/index.jsx';
 
 const messageFormSchema = yup.object().shape({
   body: yup.string().required(),
@@ -15,7 +15,7 @@ const messageFormSchema = yup.object().shape({
 const MessagesForm = ({ activeChannel }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const socketApi = useSocketApi();
+  const chatApi = useChatApi();
   const input = useRef(null);
 
   useEffect(() => {
@@ -36,7 +36,8 @@ const MessagesForm = ({ activeChannel }) => {
       };
 
       try {
-        await socketApi.sendMessage(message);
+        // await chatApi.sendMessage(message);
+        chatApi('newMessage', message);
         formik.values.body = '';
       } catch (error) {
         console.error(error.message);

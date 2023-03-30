@@ -42,6 +42,7 @@ const enLocales = {
     messageFormPlaceholder: 'Type a message...',
     send: 'Send',
     nameLength: '3 to 20 characters',
+    yourNickname: 'Your nickname',
     signUpPage: {
       minPasswordLength: 'At least 6 characters',
       invalidPasswordConfirmation: 'Password confirmation does not match the password',

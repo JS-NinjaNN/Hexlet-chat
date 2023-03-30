@@ -1,19 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { useSocketApi } from '../../hooks/index.jsx';
-import { actions } from '../../slices/index.js';
+import { useChatApi } from '../../hooks/index.jsx';
 
 const RemoveChannelModal = ({ onHide, modalInfo }) => {
   const { t } = useTranslation();
   const { id } = modalInfo.channel;
-  const socketApi = useSocketApi();
-  const dispatch = useDispatch();
-
-  const { currentChannelId } = useSelector((state) => state.channelsInfo);
+  const chatApi = useChatApi();
 
   const notify = () => toast.success(t('toasts.removeChannel'));
 
@@ -22,12 +17,9 @@ const RemoveChannelModal = ({ onHide, modalInfo }) => {
     notify();
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try {
-      await socketApi.removeChannel({ id }, handleClose);
-      if (currentChannelId === id) {
-        dispatch(actions.setCurrentChannel({ id: 1 }));
-      }
+      chatApi('removeChannel', { id }, handleClose);
     } catch (error) {
       console.error(error);
     }

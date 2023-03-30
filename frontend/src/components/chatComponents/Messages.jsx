@@ -19,7 +19,10 @@ const Messages = () => {
   const messagesView = useRef(null);
 
   useEffect(() => {
-    messagesView.current.scrollIntoView({ behavior: 'smooth' });
+    messagesView
+      .current
+      ?.lastElementChild
+      ?.scrollIntoView({ behavior: 'smooth' });
   }, [activeChannelMessages]);
 
   return (
@@ -29,11 +32,10 @@ const Messages = () => {
           activeChannel={activeChannel}
           messagesCount={activeChannelMessages.length}
         />
-        <div className="chat-messages overflow-auto px-5" id="messages-box">
+        <div className="chat-messages overflow-auto px-5" id="messages-box" ref={messagesView}>
           {activeChannelMessages.map((message) => (
             <Message message={message} key={message.id} />
           ))}
-          <div ref={messagesView} />
         </div>
         <MessagesForm activeChannel={activeChannel} />
       </div>

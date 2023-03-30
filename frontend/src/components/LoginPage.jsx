@@ -6,17 +6,16 @@ import {
   Button, Form, Col, Card, Row,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import avatarImagePath from '../assets/avatar.jpg';
 
 import { useAuth } from '../hooks/index.jsx';
-import routes from '../routes.js';
+import routes from '../routes/routes.js';
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
-  const navigate = useNavigate();
   const input = useRef(null);
   useEffect(() => {
     input.current.focus();
@@ -51,7 +50,6 @@ const LoginPage = () => {
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('userId', JSON.stringify({ ...res.data }));
         auth.logIn({ username: values.username });
-        navigate(routes.chatPagePath());
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -88,12 +86,12 @@ const LoginPage = () => {
                       }}
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
-                      placeholder={t('username')}
+                      placeholder={t('yourNickname')}
                       autoComplete="username"
                       required
                       ref={input}
                     />
-                    <Form.Label>{t('username')}</Form.Label>
+                    <Form.Label>{t('yourNickname')}</Form.Label>
                   </Form.Group>
 
                   <Form.Group className="mb-4 form-floating" controlId="password">

@@ -2,7 +2,7 @@ const ruLocales = {
   translation: {
     toasts: {
       createChannel: 'Канал создан',
-      removeChannel: 'Канал удален',
+      removeChannel: 'Канал удалён',
       renameChannel: 'Канал переименован',
       fetchDataError: 'Произошла ошибка в загрузке данных',
       changeLang: 'Язык успешно изменен на',

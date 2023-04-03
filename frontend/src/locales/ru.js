@@ -20,6 +20,9 @@ const ruLocales = {
       renameChannel: 'Переименовать канал',
       rename: 'Переименовать',
     },
+    chatApiError: 'Произошла непредвиденная ошибка',
+    update: 'Обновить страницу',
+    language: 'Русский',
     invalidData: 'Неверные имя пользователя или пароль',
     noAccount: 'Нет аккаунта?',
     signUp: 'Регистрация',
@@ -45,6 +48,7 @@ const ruLocales = {
     send: 'Отправить',
     nameLength: 'От 3 до 20 символов',
     yourNickname: 'Ваш ник',
+    noConnection: 'Отсутствует соединение с сервером',
     signUpPage: {
       minPasswordLength: 'Не менее 6 символов',
       invalidPasswordConfirmation: 'Пароли должны совпадать',

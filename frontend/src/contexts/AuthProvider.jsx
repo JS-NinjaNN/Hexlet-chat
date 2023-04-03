@@ -1,48 +1,57 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import { AuthContext } from './index.js';
+import React, {
+  createContext, useMemo, useState, useContext,
+} from 'react';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+
+import routes from '../routes/routes.js';
+import { actions as loadingStatusActions } from '../slices/loadingStatusSlice.js';
+
+const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-  const savedUserData = JSON.parse(localStorage.getItem('userId'));
-  const [loggedIn, setLoggedIn] = useState(Boolean(savedUserData));
-  const [user, setUser] = useState(
-    savedUserData ? { username: savedUserData.username } : null,
-  );
+  const dispatch = useDispatch();
 
-  const logIn = useCallback((userData) => {
-    setLoggedIn(true);
-    setUser({ username: userData.username });
-  }, []);
+  const savedUserData = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(savedUserData);
 
-  const logOut = useCallback(() => {
-    localStorage.removeItem('userId');
-    setUser(null);
-    setLoggedIn(false);
-  }, []);
+  const context = useMemo(() => {
+    const logIn = async (userData) => {
+      const { data } = await axios.post(routes.login(), userData);
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
+    };
 
-  const getAuthHeader = () => {
-    const userId = JSON.parse(localStorage.getItem('userId'));
-    if (userId && userId.token) {
-      return { Authorization: `Bearer ${userId.token}` };
-    }
-    return {};
-  };
+    const logOut = () => {
+      localStorage.removeItem('user');
+      dispatch(loadingStatusActions.unload());
+      setUser(null);
+    };
 
-  const memoizedValue = useMemo(
-    () => ({
-      loggedIn,
-      logIn,
-      logOut,
-      user,
-      getAuthHeader,
-    }),
-    [loggedIn, logIn, logOut, user],
-  );
+    const signUp = async (userData) => {
+      const { data } = await axios.post(routes.signup(), userData);
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
+    };
+
+    const loggedIn = !!user;
+
+    const getUserName = () => (user?.username ? user.username : null);
+
+    const getAuthHeader = () => (user?.token ? { Authorization: `Bearer ${user.token}` } : {});
+
+    return ({
+      logIn, logOut, signUp, loggedIn, getUserName, getAuthHeader,
+    });
+  }, [dispatch, user]);
 
   return (
-    <AuthContext.Provider value={memoizedValue}>
+    <AuthContext.Provider value={context}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+const useAuth = () => useContext(AuthContext);
+export { AuthContext, useAuth };
 export default AuthProvider;

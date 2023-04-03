@@ -1,30 +1,46 @@
 /* eslint no-param-reassign: ["error", { "props": true,
 "ignorePropertyModificationsFor": ["state"] }] */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
+import fetchInitialData from './thunks.js';
 import { actions as channelsActions } from './channelsSlice.js';
+import { actions as loadingStatusActions } from './loadingStatusSlice.js';
 
-const initialState = { messages: [] };
+const messagesAdapter = createEntityAdapter();
+
+const initialState = messagesAdapter.getInitialState();
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    newMessage: (state, { payload }) => {
-      state.messages.push(payload);
-    },
+    addMessages: messagesAdapter.addMany,
+    addMessage: messagesAdapter.addOne,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(channelsActions.fetchData.fulfilled, (state, { payload }) => {
-        state.messages = payload.messages;
-      })
       .addCase(channelsActions.removeChannel, (state, { payload }) => {
-        state.messages = state.messages
-          .filter((message) => message.channelId !== payload.id);
-      });
+        const restMessages = Object.values(state.entities).filter((e) => e.channelId !== payload);
+        messagesAdapter.setAll(state, restMessages);
+      })
+      .addCase(fetchInitialData.fulfilled, (state, { payload }) => {
+        messagesAdapter.setAll(state, payload.messages);
+      })
+      .addCase(loadingStatusActions.unload, () => initialState);
   },
 });
 
-export const { actions } = messagesSlice;
+const { actions } = messagesSlice;
+
+const selectors = messagesAdapter.getSelectors((state) => state.messages);
+const customSelectors = {
+  selectAllMesagges: selectors.selectAll,
+  selectCurrentChannelMessages: (state) => {
+    const { currentChannelId } = state.channels;
+    return selectors.selectAll(state)
+      .filter(({ channelId }) => channelId === currentChannelId);
+  },
+};
+
+export { actions, customSelectors as selectors };
 export default messagesSlice.reducer;

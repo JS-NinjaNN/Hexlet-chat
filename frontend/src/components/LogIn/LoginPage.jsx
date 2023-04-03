@@ -1,40 +1,37 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
+import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import {
-  Button, Form, Col, Card, Row,
+  Button, Form, Col, Card, Row, Container, Image,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import avatarImagePath from '../assets/avatar.jpg';
+import avatarImagePath from '../../assets/avatar.jpg';
 
-import { useAuth } from '../hooks/index.jsx';
-import routes from '../routes/routes.js';
+import { useAuth } from '../../contexts/AuthProvider.jsx';
+import routes from '../../routes/routes.js';
 
 const LoginPage = () => {
+  const rollbar = useRollbar();
   const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const input = useRef(null);
+
   useEffect(() => {
     input.current.focus();
   }, []);
 
-  const changeHandler = (e) => {
+  const handleChange = (e) => {
     e.preventDefault();
     setAuthFailed(false);
   };
 
-  const logInSchema = yup.object().shape({
-    username: yup
-      .string()
-      .trim()
-      .required(),
-    password: yup
-      .string()
-      .trim()
-      .required(),
+  const validationSchema = yup.object().shape({
+    username: yup.string().trim().required(),
+    password: yup.string().trim().required(),
   });
 
   const formik = useFormik({
@@ -42,35 +39,33 @@ const LoginPage = () => {
       username: '',
       password: '',
     },
-    validationSchema: logInSchema,
+    validationSchema,
     onSubmit: async (values) => {
       setAuthFailed(false);
-
       try {
-        const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify({ ...res.data }));
-        auth.logIn({ username: values.username });
-      } catch (err) {
+        await auth.logIn(values);
+      } catch (error) {
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 401) {
+        if (error.isAxiosError && error.response.status === 401) {
           setAuthFailed(true);
           input.current.select();
           return;
         }
-        throw err;
+        toast.error(t('noConnection'));
+        rollbar.error('LogIn', error);
       }
     },
   });
 
   return (
-    <div className="container-fluid h-100">
-      <Row className="justify-content-center align-content-center h-100">
-        <Col className="col-12 col-md-8 col-xxl-6">
+    <Container fluid className="h-100">
+      <Row className="justify-content-center align-items-center h-100">
+        <Col xs={12} md={8} xxl={6}>
           <Card className="shadow-sm">
             <Card.Body className="p-5 row">
-              <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                <img src={avatarImagePath} alt="LogIn page" className="rounded-circle" />
-              </div>
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
+                <Image src={avatarImagePath} roundedCircle alt={t('enter')} />
+              </Col>
               <Form
                 className="col-12 col-md-6 mt-3 mt-mb-0"
                 onSubmit={formik.handleSubmit}
@@ -81,7 +76,7 @@ const LoginPage = () => {
                     <Form.Control
                       type="text"
                       onChange={(e) => {
-                        changeHandler(e);
+                        handleChange(e);
                         formik.handleChange(e);
                       }}
                       value={formik.values.username}
@@ -98,7 +93,7 @@ const LoginPage = () => {
                     <Form.Control
                       type="password"
                       onChange={(e) => {
-                        changeHandler(e);
+                        handleChange(e);
                         formik.handleChange(e);
                       }}
                       value={formik.values.password}
@@ -123,7 +118,7 @@ const LoginPage = () => {
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
-              <div className="text-center">
+              <div className="text-center text-muted">
                 <span>{t('noAccount')}</span>
                 {' '}
                 <NavLink to={routes.signupPagePath()}>{t('signUp')}</NavLink>
@@ -132,7 +127,7 @@ const LoginPage = () => {
           </Card>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 };
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../hooks/index.jsx';
+import { useAuth } from '../contexts/AuthProvider.jsx';
 
 import routes from './routes.js';
 
 const PrivateRoute = () => {
-  const auth = useAuth();
+  const { loggedIn } = useAuth();
 
   return (
-    auth.loggedIn
+    loggedIn
       ? <Outlet />
       : <Navigate to={routes.loginPagePath()} />
   );

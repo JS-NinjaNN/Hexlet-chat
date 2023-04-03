@@ -1,4 +1,5 @@
-import './assets/application.scss';
+import './styles/application.scss';
+import './styles/style.css';
 import ReactDOM from 'react-dom/client';
 import Init from './Init.jsx';
 

@@ -1,102 +1,53 @@
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
 } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Navbar, Container, Button } from 'react-bootstrap';
-import { BsGlobe } from 'react-icons/bs';
-import { ToastContainer, toast } from 'react-toastify';
-import { Provider, ErrorBoundary } from '@rollbar/react';
+import { ToastContainer, Slide } from 'react-toastify';
 
-import ChatPage from './ChatPage.jsx';
-import LoginPage from './LoginPage.jsx';
-import NotFoundPage from './NotFoundPage.jsx';
-import SignUpPage from './SignUpPage.jsx';
+import ChatPage from './Chat/ChatPage.jsx';
+import LoginPage from './LogIn/LoginPage.jsx';
+import NotFoundPage from './Errors/NotFoundPage.jsx';
+import SignUpPage from './SignUp/SignUpPage.jsx';
+import NavBar from './common/NavBar.jsx';
 
 import PrivateRoute from '../routes/PrivateRoute.jsx';
 import PublicRoute from '../routes/PublicRoute.jsx';
-
-import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes/routes.js';
 
-const rollbarConfig = {
-  accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
-  payload: {
-    environment: 'production',
-  },
-  captureUncaught: true,
-  captureUnhandledRejections: true,
-};
-
-const AuthButton = ({ translation }) => {
-  const auth = useAuth();
-
-  return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut}>{translation('exit')}</Button>
-      : null
-  );
-};
-
-const App = () => {
-  const [nextLang, setNextLang] = useState('en');
-  const { t, i18n } = useTranslation();
-
-  const notify = (lang) => toast.success(`${t('toasts.changeLang')} ${lang}`);
-
-  const handleLangChange = (i18next) => {
-    i18next.changeLanguage(nextLang);
-    notify(nextLang);
-    setNextLang(nextLang === 'ru' ? 'en' : 'ru');
-  };
-
-  return (
-    <Provider config={rollbarConfig}>
-      <ErrorBoundary>
-        <div className="d-flex flex-column h-100">
-          <Router>
-            <Navbar bg="white" expand="lg" className="shadow-sm">
-              <Container>
-                <Navbar.Brand as={Link} to={routes.chatPagePath()}>{t('chatLogo')}</Navbar.Brand>
-                <Button onClick={() => handleLangChange(i18n)} variant="group-vertical">
-                  <BsGlobe size="35" />
-                </Button>
-                <AuthButton translation={t} />
-              </Container>
-            </Navbar>
-            <Routes>
-              <Route element={<PrivateRoute />}>
-                <Route path={routes.chatPagePath()} element={<ChatPage />} />
-              </Route>
-              <Route element={<PublicRoute />}>
-                <Route path={routes.loginPagePath()} element={<LoginPage />} />
-                <Route path={routes.signupPagePath()} element={<SignUpPage />} />
-              </Route>
-              <Route path={routes.notFoundPagePath()} element={<NotFoundPage />} />
-            </Routes>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rt1={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-          </Router>
-        </div>
-      </ErrorBoundary>
-    </Provider>
-  );
-};
+const App = () => (
+  <Router>
+    <div className="d-flex flex-column h-100">
+      <NavBar />
+      <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route path={routes.chatPagePath()} element={<ChatPage />} />
+        </Route>
+        <Route element={<PublicRoute />}>
+          <Route path={routes.loginPagePath()} element={<LoginPage />} />
+          <Route path={routes.signupPagePath()} element={<SignUpPage />} />
+        </Route>
+        <Route path={routes.notFoundPagePath()} element={<NotFoundPage />} />
+      </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rt1={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Slide}
+      />
+    </div>
+  </Router>
+);
 
 export default App;

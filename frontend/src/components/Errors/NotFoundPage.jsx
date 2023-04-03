@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import notFoundImagePath from '../assets/notFound.jpg';
-import routes from '../routes/routes.js';
+import notFoundImagePath from '../../assets/notFound.jpg';
+import routes from '../../routes/routes.js';
 
 const NotFoundPage = () => {
   const { t } = useTranslation();

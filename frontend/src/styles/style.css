@@ -1,0 +1,7 @@
+.message-corners-start {
+  border-radius: 0 16px 16px !important;
+}
+
+.message-corners-end {
+  border-radius: 16px 0 16px 16px !important;
+}

@@ -1,18 +1,20 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 import {
-  Button, Form, Col, Card, Row,
+  Button, Form, Col, Card, Row, Container, Image,
 } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
-import { useAuth } from '../hooks/index.jsx';
-import routes from '../routes/routes.js';
-import avatarImagePath from '../assets/avatar_1.jpg';
+import { useAuth } from '../../contexts/AuthProvider.jsx';
+import routes from '../../routes/routes.js';
+import avatarImagePath from '../../assets/avatar_1.jpg';
 
 const SignUpPage = () => {
+  const rollbar = useRollbar();
   const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
@@ -22,7 +24,7 @@ const SignUpPage = () => {
     input.current.select();
   }, [authFailed]);
 
-  const signUpSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     username: yup
       .string()
       .trim()
@@ -51,36 +53,33 @@ const SignUpPage = () => {
       password: '',
       passwordConfirmation: '',
     },
-    validationSchema: signUpSchema,
+    validationSchema,
     onSubmit: async (values) => {
       setAuthFailed(false);
 
       try {
-        const res = await axios.post(routes.signupPath(), {
-          username: values.username, password: values.password,
-        });
-        localStorage.setItem('userId', JSON.stringify({ ...res.data }));
-        auth.logIn({ username: values.username });
-      } catch (err) {
+        await auth.signUp(values);
+      } catch (error) {
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 409) {
+        if (error.isAxiosError && error.response.status === 409) {
           setAuthFailed(true);
           return;
         }
-        throw err;
+        toast.error(t('noConnection'));
+        rollbar.error('SignUp', error);
       }
     },
   });
 
   return (
-    <div className="container-fluid h-100">
-      <Row className="justify-content-center align-content-center h-100">
-        <Col className="col-12 col-md-8 col-xxl-6">
+    <Container fluid className="h-100">
+      <Row className="justify-content-center align-items-center h-100">
+        <Col xs={12} md={8} xxl={6}>
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-              <div>
-                <img src={avatarImagePath} alt="signUp page" className="rounded-circle" />
-              </div>
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
+                <Image src={avatarImagePath} roundedCircle alt={t('signUp')} />
+              </Col>
               <Form
                 className="w-50"
                 onSubmit={formik.handleSubmit}
@@ -154,7 +153,7 @@ const SignUpPage = () => {
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
-              <div className="text-center">
+              <div className="text-muted text-center">
                 <span>{t('signUpPage.signedUp')}</span>
                 {' '}
                 <NavLink to={routes.loginPagePath()}>{t('enter')}</NavLink>
@@ -163,7 +162,7 @@ const SignUpPage = () => {
           </Card>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 };
 

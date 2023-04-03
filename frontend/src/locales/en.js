@@ -20,6 +20,9 @@ const enLocales = {
       renameChannel: 'Rename the channel',
       rename: 'Rename',
     },
+    chatApiError: 'An unexpected error occurred',
+    update: 'Refresh page',
+    language: 'English',
     invalidData: 'Incorrect user name or password',
     noAccount: "Don't have an account?",
     signUp: 'Sign Up',
@@ -44,6 +47,7 @@ const enLocales = {
     send: 'Send',
     nameLength: '3 to 20 characters',
     yourNickname: 'Your nickname',
+    noConnection: 'No connection to the server',
     signUpPage: {
       minPasswordLength: 'At least 6 characters',
       invalidPasswordConfirmation: 'Password confirmation does not match the password',

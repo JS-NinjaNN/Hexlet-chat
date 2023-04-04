@@ -49,7 +49,7 @@ const InnerContent = () => {
   const currentChannelMessages = useSelector(messagesSelectors.selectCurrentChannelMessages);
 
   switch (loadingState) {
-    case 'sucсessful':
+    case 'successful':
       return (
         <>
           <Channels channels={channels} currentChannelId={currentChannel.id} />

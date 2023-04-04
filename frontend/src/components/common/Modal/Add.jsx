@@ -68,7 +68,6 @@ const Add = ({ handleClose }) => {
           <Form.Group className="mb-3" controlId="name">
             <Form.Control
               ref={input}
-              id="name"
               name="name"
               required
               onChange={formik.handleChange}
@@ -77,7 +76,7 @@ const Add = ({ handleClose }) => {
               value={formik.values.name}
               isInvalid={nameIsInvalid}
             />
-            <Form.Label htmlFor="name" visuallyHidden>{t('modals.channelName')}</Form.Label>
+            <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <FormControl.Feedback type="invalid">
               {formik.errors.name}
             </FormControl.Feedback>

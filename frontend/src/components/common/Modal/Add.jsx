@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useRollbar } from '@rollbar/react';
 import leoProfanity from 'leo-profanity';
@@ -8,11 +9,11 @@ import {
 } from 'react-bootstrap';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import { useChatApi } from '../../../contexts/ChatApiProvider.jsx';
-import { selectors as channelSelectors } from '../../../slices/channelsSlice.js';
+import { selectors as channelSelectors, actions as channelActions } from '../../../slices/channelsSlice.js';
 
 const Add = ({ handleClose }) => {
+  const dispatch = useDispatch();
   const rollbar = useRollbar();
   const { t } = useTranslation();
   const { createChannel } = useChatApi();
@@ -43,7 +44,8 @@ const Add = ({ handleClose }) => {
     onSubmit: async ({ name }) => {
       const cleanedName = leoProfanity.clean(name);
       try {
-        await createChannel(cleanedName);
+        const data = await createChannel(cleanedName);
+        dispatch(channelActions.setCurrentChannel(data.id));
         handleClose();
         toast.success(t('toasts.createChannel'));
       } catch (error) {

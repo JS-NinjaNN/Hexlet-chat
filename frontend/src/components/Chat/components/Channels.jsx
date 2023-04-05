@@ -73,7 +73,7 @@ const Channels = ({ channels, currentChannelId }) => {
       channelName: name,
     };
 
-    dispatch(modalSlice.actions.open({ type: 'remove' }, context));
+    dispatch(modalSlice.actions.open({ type: 'remove', context }));
   };
 
   // Гена, вот тут застрял) Пытаюсь сделать, чтобы при первом рендере не срабатывал useEffect

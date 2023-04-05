@@ -22,8 +22,7 @@ const ChatApiProvider = ({ socket, children }) => {
 
     const createChannel = async (name) => {
       const { data } = await socket.timeout(TIMEOUT).emitWithAck('newChannel', { name });
-      dispatch(channelsSlice.actions.addChannel(data));
-      dispatch(channelsSlice.actions.setCurrentChannel(data.id));
+      return data;
     };
 
     const renameChannel = async (id, newName) => {

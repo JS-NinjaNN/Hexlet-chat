@@ -42,8 +42,8 @@ const ChatApiProvider = ({ socket, children }) => {
       socket.on('newChannel', (channel) => {
         dispatch(channelsSlice.actions.addChannel(channel));
       });
-      socket.on('renameChannel', (channel) => {
-        dispatch(channelsSlice.actions.renameChannel(channel));
+      socket.on('renameChannel', ({ id, name }) => {
+        dispatch(channelsSlice.actions.renameChannel({ id, changes: { name } }));
       });
       socket.on('removeChannel', ({ id }) => {
         dispatch(channelsSlice.actions.removeChannel(id));

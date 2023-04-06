@@ -159,7 +159,7 @@ const SignUpPage = () => {
               <div className="text-muted text-center">
                 <span>{t('signUpPage.signedUp')}</span>
                 {' '}
-                <NavLink to={routes.loginPagePath()}>{t('enter')}</NavLink>
+                <NavLink to={routes.appRoutes.loginPagePath()}>{t('enter')}</NavLink>
               </div>
             </Card.Footer>
           </Card>

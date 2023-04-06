@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
 
   const context = useMemo(() => {
     const logIn = async (userData) => {
-      const { data } = await axios.post(routes.login(), userData);
+      const { data } = await axios.post(routes.chatApiRoutes.login(), userData);
       localStorage.setItem('user', JSON.stringify(data));
       setUser(data);
     };
@@ -29,12 +29,12 @@ const AuthProvider = ({ children }) => {
     };
 
     const signUp = async (userData) => {
-      const { data } = await axios.post(routes.signup(), userData);
+      const { data } = await axios.post(routes.chatApiRoutes.signup(), userData);
       localStorage.setItem('user', JSON.stringify(data));
       setUser(data);
     };
 
-    const loggedIn = !!user;
+    const loggedIn = Boolean(user);
 
     const getUserName = () => (user?.username ? user.username : null);
 

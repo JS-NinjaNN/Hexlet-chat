@@ -13,7 +13,7 @@ const NotFoundPage = () => {
       <p className="text-muted">
         {t('youCanGo')}
         {' '}
-        <a href={routes.chatPagePath()}>{t('homePage')}</a>
+        <a href={routes.appRoutes.chatPagePath()}>{t('homePage')}</a>
       </p>
     </div>
   );

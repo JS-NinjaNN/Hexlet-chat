@@ -56,7 +56,7 @@ const ChatApiProvider = ({ socket, children }) => {
     };
 
     const getServerData = async () => {
-      const route = routes.data();
+      const route = routes.chatApiRoutes.data();
       const headers = getAuthHeader();
       const response = await axios.get(route, { headers });
       return response;

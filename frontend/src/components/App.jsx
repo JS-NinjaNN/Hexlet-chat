@@ -25,13 +25,13 @@ const App = () => (
       <NavBar />
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path={routes.chatPagePath()} element={<ChatPage />} />
+          <Route path={routes.appRoutes.chatPagePath()} element={<ChatPage />} />
         </Route>
         <Route element={<PublicRoute />}>
-          <Route path={routes.loginPagePath()} element={<LoginPage />} />
-          <Route path={routes.signupPagePath()} element={<SignUpPage />} />
+          <Route path={routes.appRoutes.loginPagePath()} element={<LoginPage />} />
+          <Route path={routes.appRoutes.signupPagePath()} element={<SignUpPage />} />
         </Route>
-        <Route path={routes.notFoundPagePath()} element={<NotFoundPage />} />
+        <Route path={routes.appRoutes.notFoundPagePath()} element={<NotFoundPage />} />
       </Routes>
       <ToastContainer
         position="top-right"

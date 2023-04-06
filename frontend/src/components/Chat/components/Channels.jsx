@@ -76,35 +76,6 @@ const Channels = ({ channels, currentChannelId }) => {
     dispatch(modalSlice.actions.open({ type: 'remove', context }));
   };
 
-  // Гена, вот тут застрял) Пытаюсь сделать, чтобы при первом рендере не срабатывал useEffect
-  // Как при componentDidUpdate.
-  // Но срабатывает 2 рендера, один сразу и один после получения списка каналов с сервера
-  // Подскажи, как правильно обойти?
-  // В демо-проекте происходит только один action channelsInfo/setInitialState при загрузке чата
-  // Как-будто нет запроса на сервер...
-  /*
-
-  const useIsMount = () => {
-    const isMountRef = useRef(true);
-    useEffect(() => {
-      isMountRef.current = false;
-    }, []);
-    return isMountRef.current;
-  };
-
-  const channelsView = useRef(null);
-  const isMount = useIsMount();
-
-  useEffect(() => {
-    if (!isMount) {
-      channelsView
-        .current
-        ?.lastElementChild
-        ?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [channels.length, isMount]);
-  */
-
   return (
     <Col xs={4} md={3} className="border-end p-0 bg-light d-flex flex-column">
       <div className="ps-3 pe-2 pt-5 pb-2 d-flex justify-content-between align-items-center">

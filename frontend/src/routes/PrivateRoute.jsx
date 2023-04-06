@@ -10,7 +10,7 @@ const PrivateRoute = () => {
   return (
     loggedIn
       ? <Outlet />
-      : <Navigate to={routes.loginPagePath()} />
+      : <Navigate to={routes.appRoutes.loginPagePath()} />
   );
 };
 

@@ -49,7 +49,7 @@ const NavBar = () => {
   return (
     <Navbar bg="white" expand="sm" className="border-bottom shadow-sm" variant="light">
       <Container className="p-0 gap-2">
-        <Navbar.Brand as={Link} to={routes.chatPagePath()}>
+        <Navbar.Brand as={Link} to={routes.appRoutes.chatPagePath()}>
           {t('chatLogo')}
         </Navbar.Brand>
         <Navbar.Collapse id="navbar-settings">

@@ -129,7 +129,7 @@ const LoginPage = () => {
               <div className="text-center text-muted">
                 <span>{t('noAccount')}</span>
                 {' '}
-                <NavLink to={routes.signupPagePath()}>{t('signUp')}</NavLink>
+                <NavLink to={routes.appRoutes.signupPagePath()}>{t('signUp')}</NavLink>
               </div>
             </Card.Footer>
           </Card>

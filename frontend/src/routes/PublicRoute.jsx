@@ -9,7 +9,7 @@ const PublicRoute = () => {
   const { loggedIn } = useAuth();
   return (
     loggedIn
-      ? <Navigate to={routes.chatPagePath()} />
+      ? <Navigate to={routes.appRoutes.chatPagePath()} />
       : <Outlet />
   );
 };

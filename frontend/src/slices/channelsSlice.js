@@ -27,6 +27,7 @@ const channelsSlice = createSlice({
       }
       channelsAdapter.removeOne(state, payload);
     },
+    renameChannel: channelsAdapter.updateOne,
   },
   extraReducers: (builder) => {
     builder

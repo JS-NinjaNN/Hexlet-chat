@@ -22,7 +22,8 @@ const ChatApiProvider = ({ socket, children }) => {
 
     const createChannel = async (name) => {
       const { data } = await socket.timeout(TIMEOUT).emitWithAck('newChannel', { name });
-      return data;
+      dispatch(channelsSlice.actions.addChannel(data));
+      dispatch(channelsSlice.actions.setCurrentChannel(data.id));
     };
 
     const renameChannel = async (id, newName) => {
@@ -42,7 +43,7 @@ const ChatApiProvider = ({ socket, children }) => {
         dispatch(channelsSlice.actions.addChannel(channel));
       });
       socket.on('renameChannel', (channel) => {
-        dispatch(channelsSlice.actions.addChannel(channel));
+        dispatch(channelsSlice.actions.renameChannel(channel));
       });
       socket.on('removeChannel', ({ id }) => {
         dispatch(channelsSlice.actions.removeChannel(id));

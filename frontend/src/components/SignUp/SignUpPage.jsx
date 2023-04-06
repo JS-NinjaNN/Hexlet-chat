@@ -89,7 +89,10 @@ const SignUpPage = () => {
                   <Form.Group className="mb-3 form-floating" controlId="username">
                     <Form.Control
                       type="text"
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        setAuthFailed(false);
+                        formik.handleChange(e);
+                      }}
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
                       placeholder={t('username')}
@@ -146,6 +149,12 @@ const SignUpPage = () => {
                     type="submit"
                     variant="outline-primary"
                     className="w-100 mb-3"
+                    disabled={
+                      formik.errors.username
+                      || formik.errors.password
+                      || formik.errors.passwordConfirmation
+                      || authFailed
+                    }
                   >
                     {t('signUpPage.signUp')}
                   </Button>

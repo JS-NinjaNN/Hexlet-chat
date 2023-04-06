@@ -52,11 +52,9 @@ const Rename = ({ handleClose }) => {
         toast.error(t(`toasts.${error.message}`));
       }
     },
-    validateOnChange: false,
-    validateOnBlur: false,
   });
 
-  const nameIsInvalid = formik.errors.name && formik.touched.name;
+  const isNameInvalid = formik.errors.name && formik.touched.name;
 
   return (
     <>
@@ -65,18 +63,18 @@ const Rename = ({ handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-3" controlId="name">
             <Form.Control
               ref={input}
-              id="name"
               name="name"
               required
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.name}
-              isInvalid={nameIsInvalid}
+              isInvalid={isNameInvalid}
               disabled={formik.isSubmitting}
             />
-            <Form.Label htmlFor="name" visuallyHidden>{t('modals.channelName')}</Form.Label>
+            <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
@@ -96,7 +94,7 @@ const Rename = ({ handleClose }) => {
                 disabled={formik.errors.name || formik.isSubmitting}
                 className="col-3"
               >
-                {t('modals.rename')}
+                {t('modals.sendButton')}
               </Button>
             </Modal.Footer>
           </Form.Group>

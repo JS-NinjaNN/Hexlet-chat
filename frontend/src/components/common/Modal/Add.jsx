@@ -1,19 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useRollbar } from '@rollbar/react';
 import leoProfanity from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import {
-  Modal, Form, Button, FormControl,
+  Modal, Form, Button,
 } from 'react-bootstrap';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useChatApi } from '../../../contexts/ChatApiProvider.jsx';
-import { selectors as channelSelectors, actions as channelActions } from '../../../slices/channelsSlice.js';
+import { selectors as channelSelectors } from '../../../slices/channelsSlice.js';
 
 const Add = ({ handleClose }) => {
-  const dispatch = useDispatch();
   const rollbar = useRollbar();
   const { t } = useTranslation();
   const { createChannel } = useChatApi();
@@ -37,15 +36,12 @@ const Add = ({ handleClose }) => {
   }, []);
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-    },
+    initialValues: { name: '' },
     validationSchema,
     onSubmit: async ({ name }) => {
       const cleanedName = leoProfanity.clean(name);
       try {
-        const data = await createChannel(cleanedName);
-        dispatch(channelActions.setCurrentChannel(data.id));
+        await createChannel(cleanedName);
         handleClose();
         toast.success(t('toasts.createChannel'));
       } catch (error) {
@@ -53,11 +49,9 @@ const Add = ({ handleClose }) => {
         toast.error(t('noConnection'));
       }
     },
-    validateOnChange: false,
-    validateOnBlur: false,
   });
 
-  const nameIsInvalid = formik.errors.name && formik.touched.name;
+  const isNameInvalid = formik.errors.name && formik.touched.name;
 
   return (
     <>
@@ -76,12 +70,12 @@ const Add = ({ handleClose }) => {
               onBlur={formik.handleBlur}
               disabled={formik.isSubmitting}
               value={formik.values.name}
-              isInvalid={nameIsInvalid}
+              isInvalid={isNameInvalid}
             />
             <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
-            <FormControl.Feedback type="invalid">
+            <Form.Control.Feedback type="invalid">
               {formik.errors.name}
-            </FormControl.Feedback>
+            </Form.Control.Feedback>
             <Modal.Footer>
               <Button
                 variant="outline-primary"
@@ -96,7 +90,7 @@ const Add = ({ handleClose }) => {
                 onClick={formik.handleSubmit}
                 disabled={formik.errors.name || formik.isSubmitting}
               >
-                {t('modals.addButton')}
+                {t('modals.sendButton')}
               </Button>
             </Modal.Footer>
           </Form.Group>

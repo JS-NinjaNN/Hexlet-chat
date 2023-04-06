@@ -30,8 +30,8 @@ const LoginPage = () => {
   };
 
   const validationSchema = yup.object().shape({
-    username: yup.string().trim().required(),
-    password: yup.string().trim().required(),
+    username: yup.string().trim().required(t('required')),
+    password: yup.string().trim().required(t('required')),
   });
 
   const formik = useFormik({
@@ -56,6 +56,9 @@ const LoginPage = () => {
       }
     },
   });
+
+  const isUsernameInvalid = formik.errors.username && formik.touched.username;
+  const isPasswordInvalid = formik.errors.password && formik.touched.password;
 
   return (
     <Container fluid className="h-100">
@@ -85,8 +88,12 @@ const LoginPage = () => {
                       autoComplete="username"
                       required
                       ref={input}
+                      isInvalid={authFailed || isUsernameInvalid}
                     />
                     <Form.Label>{t('yourNickname')}</Form.Label>
+                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip={isUsernameInvalid}>
+                      {formik.errors.username}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group className="mb-4 form-floating" controlId="password">
@@ -100,11 +107,13 @@ const LoginPage = () => {
                       onBlur={formik.handleBlur}
                       placeholder={t('password')}
                       autoComplete="current-password"
-                      isInvalid={authFailed}
+                      isInvalid={authFailed || isPasswordInvalid}
                       required
                     />
                     <Form.Label>{t('password')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip>{t('invalidData')}</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip>
+                      {formik.errors.password || t('invalidData')}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Button
                     type="submit"

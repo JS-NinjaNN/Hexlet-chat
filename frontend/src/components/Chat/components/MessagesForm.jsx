@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import leoProfanity from 'leo-profanity';
 import { Form, Button, InputGroup } from 'react-bootstrap';
-import { BsArrowRightSquare } from 'react-icons/bs';
+import { MdArrowForward } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
@@ -72,11 +72,11 @@ const MessagesForm = ({ channelId }) => {
         />
         <Button
           disabled={formik.errors.body || formik.isSubmitting}
-          className="border-0 rounded-circle p-0 m-1 position-absolute end-0"
+          className="border-0 rounded-circle p-0 m-1 position-absolute end-0 me-3"
           style={{ zIndex: 5 }}
           type="submit"
         >
-          <BsArrowRightSquare size="30" />
+          <MdArrowForward size="30" />
           <span className="visually-hidden">{t('send')}</span>
         </Button>
       </InputGroup>

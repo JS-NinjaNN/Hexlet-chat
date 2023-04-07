@@ -41,4 +41,4 @@ make start
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 
-![Main chat](https://user-images.githubusercontent.com/113940218/228737818-21184b00-a6d6-49e2-bc3f-f9cc20624518.PNG)
+![Main chat](https://user-images.githubusercontent.com/113940218/230680749-1293034a-3bb4-4023-a63b-174569e19fd8.png)

@@ -40,7 +40,7 @@ const enLocales = {
     remove: 'Remove',
     rename: 'Rename',
     messages_one: '{{count}} message',
-    messages_many: '{{count}} messages',
+    messages_other: '{{count}} messages',
     newMessage: 'New message',
     messageFormPlaceholder: 'Type a message...',
     send: 'Send',

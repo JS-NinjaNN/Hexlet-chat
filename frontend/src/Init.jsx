@@ -30,6 +30,7 @@ const Init = async () => {
     .use(initReactI18next)
     .init({
       resources,
+      debug: true,
       lng: DEFAULT_LANGUAGE,
       fallbackLng: ['en', 'ru'],
     });

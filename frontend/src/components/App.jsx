@@ -17,7 +17,7 @@ import NavBar from './common/NavBar.jsx';
 
 import PrivateRoute from '../routes/PrivateRoute.jsx';
 import PublicRoute from '../routes/PublicRoute.jsx';
-import routes from '../routes/routes.js';
+import { appRoutes } from '../routes/routes.js';
 
 const App = () => (
   <Router>
@@ -25,13 +25,13 @@ const App = () => (
       <NavBar />
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path={routes.appRoutes.chatPagePath()} element={<ChatPage />} />
+          <Route path={appRoutes.chatPagePath()} element={<ChatPage />} />
         </Route>
         <Route element={<PublicRoute />}>
-          <Route path={routes.appRoutes.loginPagePath()} element={<LoginPage />} />
-          <Route path={routes.appRoutes.signupPagePath()} element={<SignUpPage />} />
+          <Route path={appRoutes.loginPagePath()} element={<LoginPage />} />
+          <Route path={appRoutes.signupPagePath()} element={<SignUpPage />} />
         </Route>
-        <Route path={routes.appRoutes.notFoundPagePath()} element={<NotFoundPage />} />
+        <Route path={appRoutes.notFoundPagePath()} element={<NotFoundPage />} />
       </Routes>
       <ToastContainer
         position="top-right"

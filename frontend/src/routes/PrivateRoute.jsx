@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthProvider.jsx';
 
-import routes from './routes.js';
+import { appRoutes } from './routes.js';
 
 const PrivateRoute = () => {
   const { loggedIn } = useAuth();
@@ -10,7 +10,7 @@ const PrivateRoute = () => {
   return (
     loggedIn
       ? <Outlet />
-      : <Navigate to={routes.appRoutes.loginPagePath()} />
+      : <Navigate to={appRoutes.loginPagePath()} />
   );
 };
 

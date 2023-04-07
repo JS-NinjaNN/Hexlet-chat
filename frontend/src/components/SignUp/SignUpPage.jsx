@@ -10,7 +10,7 @@ import {
 import { NavLink } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/AuthProvider.jsx';
-import routes from '../../routes/routes.js';
+import { appRoutes } from '../../routes/routes.js';
 import avatarImagePath from '../../assets/avatar_1.jpg';
 
 const SignUpPage = () => {
@@ -159,7 +159,7 @@ const SignUpPage = () => {
               <div className="text-muted text-center">
                 <span>{t('signUpPage.signedUp')}</span>
                 {' '}
-                <NavLink to={routes.appRoutes.loginPagePath()}>{t('enter')}</NavLink>
+                <NavLink to={appRoutes.loginPagePath()}>{t('enter')}</NavLink>
               </div>
             </Card.Footer>
           </Card>

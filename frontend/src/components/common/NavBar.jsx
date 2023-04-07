@@ -5,7 +5,7 @@ import {
 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthProvider.jsx';
-import routes from '../../routes/routes.js';
+import { appRoutes } from '../../routes/routes.js';
 
 const LanguageSelector = () => {
   const { t, i18n } = useTranslation();
@@ -49,7 +49,7 @@ const NavBar = () => {
   return (
     <Navbar bg="white" expand="sm" className="border-bottom shadow-sm" variant="light">
       <Container className="p-0 gap-2">
-        <Navbar.Brand as={Link} to={routes.appRoutes.chatPagePath()}>
+        <Navbar.Brand as={Link} to={appRoutes.chatPagePath()}>
           {t('chatLogo')}
         </Navbar.Brand>
         <Navbar.Collapse id="navbar-settings">

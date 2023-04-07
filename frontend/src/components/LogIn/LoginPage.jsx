@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
 import avatarImagePath from '../../assets/avatar.jpg';
 
 import { useAuth } from '../../contexts/AuthProvider.jsx';
-import routes from '../../routes/routes.js';
+import { appRoutes } from '../../routes/routes.js';
 
 const LoginPage = () => {
   const rollbar = useRollbar();
@@ -129,7 +129,7 @@ const LoginPage = () => {
               <div className="text-center text-muted">
                 <span>{t('noAccount')}</span>
                 {' '}
-                <NavLink to={routes.appRoutes.signupPagePath()}>{t('signUp')}</NavLink>
+                <NavLink to={appRoutes.signupPagePath()}>{t('signUp')}</NavLink>
               </div>
             </Card.Footer>
           </Card>

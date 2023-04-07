@@ -4,7 +4,7 @@ import React, {
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
-import routes from '../routes/routes.js';
+import { chatApiRoutes } from '../routes/routes.js';
 import { actions as loadingStatusActions } from '../slices/loadingStatusSlice.js';
 
 const AuthContext = createContext({});
@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
 
   const context = useMemo(() => {
     const logIn = async (userData) => {
-      const { data } = await axios.post(routes.chatApiRoutes.login(), userData);
+      const { data } = await axios.post(chatApiRoutes.login(), userData);
       localStorage.setItem('user', JSON.stringify(data));
       setUser(data);
     };
@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const signUp = async (userData) => {
-      const { data } = await axios.post(routes.chatApiRoutes.signup(), userData);
+      const { data } = await axios.post(chatApiRoutes.signup(), userData);
       localStorage.setItem('user', JSON.stringify(data));
       setUser(data);
     };

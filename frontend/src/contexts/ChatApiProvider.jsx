@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
-import routes from '../routes/routes.js';
+import { chatApiRoutes } from '../routes/routes.js';
 import * as channelsSlice from '../slices/channelsSlice.js';
 import * as messagesSlice from '../slices/messagesSlice.js';
 import { useAuth } from './AuthProvider.jsx';
@@ -56,7 +56,7 @@ const ChatApiProvider = ({ socket, children }) => {
     };
 
     const getServerData = async () => {
-      const route = routes.chatApiRoutes.data();
+      const route = chatApiRoutes.data();
       const headers = getAuthHeader();
       const response = await axios.get(route, { headers });
       return response;

@@ -12,7 +12,8 @@ import store from './slices/index.js';
 import ChatApiProvider from './contexts/ChatApiProvider.jsx';
 import AuthProvider from './contexts/AuthProvider.jsx';
 
-const DEFAULT_LANGUAGE = 'ru';
+const userLanguage = localStorage.getItem('userLanguage');
+const DEFAULT_LANGUAGE = userLanguage ?? 'ru';
 
 const Init = async () => {
   const rollbarConfig = {

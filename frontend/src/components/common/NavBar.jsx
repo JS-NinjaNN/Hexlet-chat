@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Navbar, Container, Button, NavDropdown, Nav,
@@ -12,12 +13,17 @@ const LanguageSelector = () => {
 
   const { changeLanguage, resolvedLanguage } = i18n;
 
+  const handleChangeLanguage = (lng) => {
+    localStorage.setItem('userLanguage', lng);
+    changeLanguage(lng);
+  };
+
   return (
     <NavDropdown title={t('language')}>
       {i18n.languages
         .filter((lng) => lng !== resolvedLanguage)
         .map((lng) => (
-          <NavDropdown.Item key={lng} onClick={() => changeLanguage(lng)}>
+          <NavDropdown.Item key={lng} onClick={() => handleChangeLanguage(lng)}>
             {i18n.getFixedT(lng)('language')}
           </NavDropdown.Item>
         ))}

@@ -25,8 +25,7 @@ const Rename = ({ handleClose }) => {
   }, []);
 
   const { channelId, channelName } = useSelector(modalSelectors.getModalContext);
-  const otherChannelNames = useSelector(channelsSelectors.selectAllChannelsNames)
-    .filter((name) => name !== channelName);
+  const existingChannelNames = useSelector(channelsSelectors.selectAllChannelsNames);
 
   const validationSchema = () => yup.object().shape({
     name: yup
@@ -35,12 +34,14 @@ const Rename = ({ handleClose }) => {
       .required(t('required'))
       .min(3, t('nameLength'))
       .max(20, t('nameLength'))
-      .notOneOf(otherChannelNames, t('modals.duplicate')),
+      .notOneOf(existingChannelNames, t('modals.duplicate')),
   });
 
   const formik = useFormik({
     initialValues: { name: channelName },
     validationSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async ({ name }) => {
       const cleanedName = leoProfanity.clean(name);
       try {
@@ -61,18 +62,19 @@ const Rename = ({ handleClose }) => {
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.renameChannel')}</Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
+        <Form onSubmit={formik.handleSubmit} autoComplete="off">
           <Form.Group className="mb-3" controlId="name">
             <Form.Control
               ref={input}
               name="name"
               required
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
               value={formik.values.name}
               isInvalid={isNameInvalid}
               disabled={formik.isSubmitting}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
             <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
@@ -91,7 +93,7 @@ const Rename = ({ handleClose }) => {
                 variant="primary"
                 type="submit"
                 onClick={formik.handleSubmit}
-                disabled={formik.errors.name || formik.isSubmitting}
+                disabled={formik.isSubmitting}
                 className="col-3"
               >
                 {t('modals.sendButton')}

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import leoProfanity from 'leo-profanity';
@@ -10,6 +11,7 @@ import { toast } from 'react-toastify';
 
 import { useAuth } from '../../../contexts/AuthProvider.jsx';
 import { useChatApi } from '../../../contexts/ChatApiProvider.jsx';
+import { selectors as channelsSelectors } from '../../../slices/channelsSlice.js';
 
 const validationSchema = yup.object().shape({
   body: yup.string().trim().required(),
@@ -22,9 +24,11 @@ const MessagesForm = ({ channelId }) => {
   const { sendMessage } = useChatApi();
   const input = useRef(null);
 
+  const currentChannel = useSelector(channelsSelectors.selectCurrentChannel);
+
   useEffect(() => {
     input.current.focus();
-  }, []);
+  }, [currentChannel]);
 
   const formik = useFormik({
     initialValues: {

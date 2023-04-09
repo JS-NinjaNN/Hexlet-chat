@@ -18,6 +18,12 @@ import { selectors as loadingStatusSelectors } from '../../slices/loadingStatusS
 import { selectors as channelsSelectors } from '../../slices/channelsSlice.js';
 import { selectors as messagesSelectors } from '../../slices/messagesSlice.js';
 
+const statusesMap = {
+  successful: 'successful',
+  failed: 'failed',
+  authError: 'authError',
+};
+
 const Placeholder = () => (
   <Rings
     height="200"
@@ -30,7 +36,7 @@ const Placeholder = () => (
   />
 );
 
-const Error = () => {
+const ChatError = () => {
   const { t } = useTranslation;
   const navigate = useNavigate();
 
@@ -49,7 +55,7 @@ const InnerContent = () => {
   const currentChannelMessages = useSelector(messagesSelectors.selectCurrentChannelMessages);
 
   switch (loadingState) {
-    case 'successful':
+    case statusesMap.successful:
       return (
         <>
           <Channels channels={channels} currentChannelId={currentChannel.id} />
@@ -57,8 +63,8 @@ const InnerContent = () => {
         </>
       );
 
-    case 'failed':
-      return <Error />;
+    case statusesMap.failed:
+      return <ChatError />;
 
     default:
       return <Placeholder />;
@@ -85,13 +91,13 @@ const ChatPage = () => {
 
   useEffect(() => {
     switch (loadingState) {
-      case 'authError':
+      case statusesMap.authError:
         toast.error(t('toasts.fetchDataError'));
         rollbar.error('Chat#authError');
         logOut();
         break;
 
-      case 'failed':
+      case statusesMap.failed:
         rollbar.error('Chat#failed');
         break;
 

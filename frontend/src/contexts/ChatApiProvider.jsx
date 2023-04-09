@@ -7,6 +7,13 @@ import * as channelsSlice from '../slices/channelsSlice.js';
 import * as messagesSlice from '../slices/messagesSlice.js';
 import { useAuth } from './AuthProvider.jsx';
 
+const actionsMap = {
+  newMessage: () => 'newMessage',
+  newChannel: () => 'newChannel',
+  renameChannel: () => 'renameChannel',
+  removeChannel: () => 'removeChannel',
+};
+
 const ChatApiContext = createContext({});
 
 const ChatApiProvider = ({ socket, children }) => {
@@ -17,35 +24,45 @@ const ChatApiProvider = ({ socket, children }) => {
 
   const context = useMemo(() => {
     const sendMessage = async (message) => {
-      await socket.timeout(TIMEOUT).emitWithAck('newMessage', { ...message, timestamp: Date.now() });
+      await socket
+        .timeout(TIMEOUT)
+        .emitWithAck(actionsMap.newMessage(), { ...message, timestamp: Date.now() });
     };
 
     const createChannel = async (name) => {
-      const { data } = await socket.timeout(TIMEOUT).emitWithAck('newChannel', { name });
+      const { data } = await socket
+        .timeout(TIMEOUT)
+        .emitWithAck(actionsMap.newChannel(), { name });
+
       dispatch(channelsSlice.actions.addChannel(data));
       dispatch(channelsSlice.actions.setCurrentChannel(data.id));
     };
 
     const renameChannel = async (id, newName) => {
-      await socket.timeout(TIMEOUT).emitWithAck('renameChannel', { id, name: newName });
+      await socket
+        .timeout(TIMEOUT)
+        .emitWithAck(actionsMap.renameChannel(), { id, name: newName });
     };
 
     const removeChannel = async (id) => {
-      await socket.timeout(TIMEOUT).emitWithAck('removeChannel', { id });
+      await socket
+        .timeout(TIMEOUT)
+        .emitWithAck(actionsMap.removeChannel(), { id });
     };
 
     const connectSocket = () => {
       socket.connect();
-      socket.on('newMessage', (message) => {
+
+      socket.on(actionsMap.newMessage(), (message) => {
         dispatch(messagesSlice.actions.addMessage(message));
       });
-      socket.on('newChannel', (channel) => {
+      socket.on(actionsMap.newChannel(), (channel) => {
         dispatch(channelsSlice.actions.addChannel(channel));
       });
-      socket.on('renameChannel', ({ id, name }) => {
+      socket.on(actionsMap.renameChannel(), ({ id, name }) => {
         dispatch(channelsSlice.actions.renameChannel({ id, changes: { name } }));
       });
-      socket.on('removeChannel', ({ id }) => {
+      socket.on(actionsMap.removeChannel(), ({ id }) => {
         dispatch(channelsSlice.actions.removeChannel(id));
       });
     };

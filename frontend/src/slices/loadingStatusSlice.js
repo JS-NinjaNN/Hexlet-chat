@@ -4,8 +4,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import fetchInitialData from './thunks.js';
 
+const statusesMap = {
+  notLoaded: 'notLoaded',
+  loading: 'loading',
+  successful: 'successful',
+  authError: 'authError',
+  failed: 'failed',
+};
+
 const initialState = {
-  serverData: 'notLoaded',
+  serverData: statusesMap.notLoaded,
 };
 
 const loadingStatusSlice = createSlice({
@@ -16,13 +24,13 @@ const loadingStatusSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchInitialData.pending, () => 'loading')
-      .addCase(fetchInitialData.fulfilled, () => 'successful')
+      .addCase(fetchInitialData.pending, () => statusesMap.loading)
+      .addCase(fetchInitialData.fulfilled, () => statusesMap.successful)
       .addCase(fetchInitialData.rejected, (_state, action) => {
         if (action.payload === 401) {
-          return 'authError';
+          return statusesMap.authError;
         }
-        return 'failed';
+        return statusesMap.failed;
       });
   },
 });

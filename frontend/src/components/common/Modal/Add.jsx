@@ -38,6 +38,8 @@ const Add = ({ handleClose }) => {
   const formik = useFormik({
     initialValues: { name: '' },
     validationSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async ({ name }) => {
       const cleanedName = leoProfanity.clean(name);
       try {
@@ -68,13 +70,13 @@ const Add = ({ handleClose }) => {
               required
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              disabled={formik.isSubmitting}
               value={formik.values.name}
               isInvalid={isNameInvalid}
+              disabled={formik.isSubmitting}
             />
             <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
+              {formik.errors.name && formik.errors.name}
             </Form.Control.Feedback>
             <Modal.Footer>
               <Button
@@ -88,7 +90,7 @@ const Add = ({ handleClose }) => {
                 variant="primary"
                 type="submit"
                 onClick={formik.handleSubmit}
-                disabled={formik.errors.name || formik.isSubmitting}
+                disabled={formik.isSubmitting}
               >
                 {t('modals.sendButton')}
               </Button>

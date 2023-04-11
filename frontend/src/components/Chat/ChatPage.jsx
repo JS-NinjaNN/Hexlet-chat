@@ -37,7 +37,7 @@ const Placeholder = () => (
 );
 
 const ChatError = () => {
-  const { t } = useTranslation;
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
